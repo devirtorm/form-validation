@@ -5,17 +5,17 @@ function Input({ name, label, error, type, value, onChange, isSubmitted }) {
   // Clases que dependen de si hay error o no y si el formulario ha sido enviado
   const inputClass = isSubmitted
     ? (error
-        ? "border border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500 dark:bg-red-100 dark:border-red-400"
-        : "border border-green-300 text-green-900 focus:ring-green-500 focus:border-green-500 dark:bg-green-100 dark:border-green-400")
+        ? "border border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500"
+        : "border border-green-600 text-green-900 focus:ring-green-900 focus:border-green-900")
     : "border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500";
 
-  const messageClass = `mt-2 text-sm ${isSubmitted ? (error ? 'text-red-600' : 'text-green-600') : 'text-gray-600'}`;
+  const messageClass = `mt-2 text-sm ${isSubmitted ? (error ? 'text-red-700' : 'text-green-700') : 'text-gray-700'}`;
 
   return (
     <div className="mb-5">
       <label
         htmlFor={name}
-        className={`block mb-2 text-sm font-medium ${isSubmitted ? (error ? 'text-red-700 dark:text-red-500' : 'text-green-700 dark:text-green-500') : 'text-gray-700'}`}
+        className={`block mb-2 text-sm font-black ${isSubmitted ? (error ? 'text-red-700' : 'text-green-800') : 'text-gray-700'}`}
       >
         {label}
       </label>

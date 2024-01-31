@@ -52,23 +52,23 @@ function Form() {
     }
 
     // Validación para el correo electrónico 1
-    if (!formData.domain) {
+    if (!formData.email) {
       tempErrors.domain = "El correo electrónico es obligatorio";
     } else if (
       !/^[a-zA-Z0-9._%+-]+@(gmail|hotmail|outlook|live|yahoo)\.com$/.test(
-        formData.domain
+        formData.email
       )
     ) {
       tempErrors.email1 = "Correo electrónico no válido";
     }
 
     // Validación para el correo electrónico 2
-    if (!formData.email) {
-      tempErrors.email = "El correo electrónico es obligatorio";
+    if (!formData.domain) {
+      tempErrors.domain = "El correo electrónico es obligatorio";
     } else if (
-      !/^[a-zA-Z0-9._%+-]+@utdelacosta\.edu\.mx$/.test(formData.email2)
+      !/^[a-zA-Z0-9._%+-]+@utdelacosta\.edu\.mx$/.test(formData.domain)
     ) {
-      tempErrors.email = "Correo electrónico no válido";
+      tempErrors.domain = "Correo electrónico no válido";
     }
 
     // Validación para la contraseña
@@ -140,83 +140,85 @@ function Form() {
   };
 
   return (
-    <div className="container my-auto mx-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white container p-10 shadow-md rounded-sm border"
-      >
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <Input
-            name="name"
-            type="text"
-            label="Nombre"
-            value={formData.name}
-            onChange={handleChange}
-            error={errors.name}
-            isSubmitted={isSubmitted}
-          />
-          <Input
-            name="age"
-            type="text"
-            label="Edad"
-            value={formData.age}
-            onChange={handleChange}
-            error={errors.age}
-            isSubmitted={isSubmitted}
-          />
-          <Input
-            name="salary"
-            type="text"
-            label="Sueldo"
-            value={formData.salary}
-            onChange={handleChange}
-            error={errors.salary}
-            isSubmitted={isSubmitted}
-          />
-          <Input
-            name="domain"
-            type="text"
-            label="Dominio"
-            value={formData.domain}
-            onChange={handleChange}
-            error={errors.domain}
-            isSubmitted={isSubmitted}
-          />
-          <Input
-            name="email"
-            type="email"
-            label="Correo electrónico"
-            value={formData.email}
-            onChange={handleChange}
-            error={errors.email}
-            isSubmitted={isSubmitted}
-          />
-          <Input
-            name="password"
-            type="password"
-            label="Ingresa contraseña"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            isSubmitted={isSubmitted}
-          />
-        </div>
-        {/* Nombre */}
-
-        <button
-          type="submit"
-          className="text-white bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    <div className="container my-auto mx-auto p-4">
+      <div>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white container p-10 shadow-md rounded-sm border"
         >
-          Guardar datos
-        </button>
-      </form>
-      {Object.keys(errors).length > 0 ? (
-        <div className="mt-10 p-10 bg-red-400 border-red-700 border-2 rounded-md">
-          <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-            {renderErrorMessages()}
-          </ul>
-        </div>
-      ) : null}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:grid-cols-1 lg:grid-cols-3">
+            <Input
+              name="name"
+              type="text"
+              label="Nombre"
+              value={formData.name}
+              onChange={handleChange}
+              error={errors.name}
+              isSubmitted={isSubmitted}
+            />
+            <Input
+              name="age"
+              type="text"
+              label="Edad"
+              value={formData.age}
+              onChange={handleChange}
+              error={errors.age}
+              isSubmitted={isSubmitted}
+            />
+            <Input
+              name="salary"
+              type="text"
+              label="Sueldo"
+              value={formData.salary}
+              onChange={handleChange}
+              error={errors.salary}
+              isSubmitted={isSubmitted}
+            />
+            <Input
+              name="domain"
+              type="text"
+              label="Dominio"
+              value={formData.domain}
+              onChange={handleChange}
+              error={errors.domain}
+              isSubmitted={isSubmitted}
+            />
+            <Input
+              name="email"
+              type="email"
+              label="Correo electrónico"
+              value={formData.email}
+              onChange={handleChange}
+              error={errors.email}
+              isSubmitted={isSubmitted}
+            />
+            <Input
+              name="password"
+              type="password"
+              label="Ingresa contraseña"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors.password}
+              isSubmitted={isSubmitted}
+            />
+          </div>
+          {/* Nombre */}
+
+          <button
+            type="submit"
+            className="text-white bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Guardar datos
+          </button>
+        </form>
+        {Object.keys(errors).length > 0 ? (
+          <div className="mt-10 p-10 bg-red-400 border-red-700 border-2 rounded-md">
+            <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+              {renderErrorMessages()}
+            </ul>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
