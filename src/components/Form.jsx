@@ -53,7 +53,7 @@ function Form() {
 
     // Validación para el correo electrónico 1
     if (!formData.email) {
-      tempErrors.domain = "El correo electrónico es obligatorio";
+      tempErrors.email = "El correo electrónico es obligatorio";
     } else if (
       !/^[a-zA-Z0-9._%+-]+@(gmail|hotmail|outlook|live|yahoo)\.com$/.test(
         formData.email
