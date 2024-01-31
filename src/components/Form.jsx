@@ -140,10 +140,10 @@ function Form() {
   };
 
   return (
-    <div className="container w-75 mx-auto">
+    <div className="container my-auto mx-auto">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-10 shadow-md rounded-sm border"
+        className="bg-white container p-10 shadow-md rounded-sm border"
       >
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Input
