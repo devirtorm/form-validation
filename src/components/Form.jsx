@@ -59,7 +59,7 @@ function Form() {
         formData.email
       )
     ) {
-      tempErrors.email1 = "Correo electrónico no válido";
+      tempErrors.email = "Correo electrónico no válido";
     }
 
     // Validación para el correo electrónico 2
