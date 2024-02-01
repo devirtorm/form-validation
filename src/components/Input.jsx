@@ -1,15 +1,15 @@
 function Input({ name, label, error, type, value, onChange, isSubmitted }) {
-  // Clases base que no cambian
-  const baseInputClass = "text-xs rounded-lg block w-full p-2.5";
+  // clases que se mantienen igual
+  const baseInputClass = "text-xs rounded block w-full p-2.5";
 
-  // Clases que dependen de si hay error o no y si el formulario ha sido enviado
+  //clases que dependen de si hay error o no y si el formulario ha sido enviado
   const inputClass = isSubmitted
     ? (error
-        ? "border border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500"
-        : "border border-green-600 text-green-900 focus:ring-green-900 focus:border-green-900")
-    : "border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500";
+        ? "border font-semibold border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500"
+        : "border font-semibold border-green-600 text-green-900 focus:ring-green-900 focus:border-green-900")
+    : "border font-semibold border-gray-300 focus:ring-indigo-500 focus:border-indigo-500";
 
-  const messageClass = `mt-2 text-sm ${isSubmitted ? (error ? 'text-red-700' : 'text-green-700') : 'text-gray-700'}`;
+  const messageClass = `mt-2 font-bold text-xs ${isSubmitted ? (error ? 'text-red-700' : 'text-green-700') : 'text-gray-700'}`;
 
   return (
     <div className="mb-5">

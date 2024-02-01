@@ -1,14 +1,18 @@
 import Form from "@/components/Form";
+import Footer from "@/components/Footer";
 
 function page() {
   return (
-    <div className=" mt-10 font-black">
-      <p className="text-center mb-10 text-2xl">
-        Validación de
-        <span className="text-indigo-600"> formularios</span>
-      </p>
+    <div className="flex flex-col min-h-screen">
+      <div className="mt-10 flex-1">
+        <p className="text-center font-black mb-10 text-2xl dark:text-white">
+          Validación de
+          <span className="text-indigo-600"> formularios</span>
+        </p>
 
-      <Form />
+        <Form />
+      </div>
+      <Footer />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../components/Input";
 import spanishWords from "an-array-of-spanish-words";
 
@@ -14,10 +14,22 @@ function Form() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showErrors, setShowErrors] = useState(false);
 
-  const isPasswordInDictionary = (password) => {
-    return spanishWords.some((word) => password.toLowerCase().includes(word));
-  };
+
+  //efecto que hace que la alerta se mantenga por 5 segundos
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      setShowErrors(true);
+
+      const timer = setTimeout(() => {
+        setShowErrors(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
 
   const validateForm = () => {
     let tempErrors = {};
@@ -35,9 +47,9 @@ function Form() {
     } else if (
       !/^\d+$/.test(formData.age) ||
       formData.age < 1 ||
-      formData.age > 96
+      formData.age > 100
     ) {
-      tempErrors.age = "La edad debe ser un número entre 1 y 96";
+      tempErrors.age = "La edad debe ser un número entre 1 y 100";
     }
 
     // Validación para el sueldo
@@ -90,16 +102,9 @@ function Form() {
           message: "No números iguales juntos",
         },
         { regex: /.{10,}/, message: "Mínimo 10 caracteres" },
-        // Falta la validación de palabras del diccionario
       ];
 
-      if (isPasswordInDictionary(formData.password)) {
-        passwordRules.push({
-          regex: /.*/,
-          message: "La contraseña no puede ser una palabra del diccionario",
-        });
-      }
-
+      //se itera sobre los errores acumulados en " rule " y los errores encontrados se acumulan en el objeto tempErrors
       let passwordErrors = passwordRules
         .filter((rule) => !rule.regex.test(formData.password))
         .map((rule) => rule.message);
@@ -109,8 +114,10 @@ function Form() {
       }
     }
 
+    //se establecen los errores en el estado de errores
     setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+
+    return Object.keys(tempErrors).length === 0; // si no
   };
 
   const handleChange = (e) => {
@@ -122,7 +129,7 @@ function Form() {
     e.preventDefault();
     setIsSubmitted(true);
     if (validateForm()) {
-      console.log("Form Data:", formData);
+      formData;
     }
   };
 
@@ -144,9 +151,9 @@ function Form() {
       <div>
         <form
           onSubmit={handleSubmit}
-          className="bg-white container p-10 shadow-md rounded-sm border"
+          className="bg-white container p-10 shadow-md rounded border-4"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:grid-cols-1 lg:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:grid-cols-1 lg:grid-cols-3 mb-5">
             <Input
               name="name"
               type="text"
@@ -202,17 +209,17 @@ function Form() {
               isSubmitted={isSubmitted}
             />
           </div>
-          {/* Nombre */}
 
           <button
             type="submit"
-            className="text-white bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center"
           >
             Guardar datos
           </button>
         </form>
-        {Object.keys(errors).length > 0 ? (
+        {showErrors && Object.keys(errors).length > 0 ? (
           <div className="mt-10 p-10 bg-red-400 border-red-700 border-2 rounded-md">
+            <h3 className="text-white mb-2 font-bold">Lista de errores</h3>
             <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
               {renderErrorMessages()}
             </ul>
