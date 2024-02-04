@@ -1,6 +1,6 @@
-function Input({ name, label, error, type, value, onChange, isSubmitted }) {
+function Input({ name, label, error, type, value, onChange, isSubmitted, placeholder }) {
   // clases que se mantienen igual
-  const baseInputClass = "text-xs rounded block w-full p-2.5";
+  const baseInputClass = "text-xs rounded block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
 
   //clases que dependen de si hay error o no y si el formulario ha sido enviado
   const inputClass = isSubmitted
@@ -15,7 +15,7 @@ function Input({ name, label, error, type, value, onChange, isSubmitted }) {
     <div className="mb-5">
       <label
         htmlFor={name}
-        className={`block mb-2 text-sm font-black ${isSubmitted ? (error ? 'text-red-700' : 'text-green-800') : 'text-gray-700'}`}
+        className={`block mb-2 text-sm font-black ${isSubmitted ? (error ? 'text-red-700' : 'text-green-800') : 'text-gray-700 dark:text-gray-100'}`}
       >
         {label}
       </label>
@@ -26,7 +26,7 @@ function Input({ name, label, error, type, value, onChange, isSubmitted }) {
         className={`${baseInputClass} ${inputClass}`}
         value={value}
         onChange={onChange}
-        placeholder={label}
+        placeholder={placeholder}
       />
       {isSubmitted && (
         <p className={messageClass}>

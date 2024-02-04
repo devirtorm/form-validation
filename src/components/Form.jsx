@@ -1,21 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
+import {
+  containsCommonSpanishWord,
+  containsSequentialNumbers,
+} from "@/helpers/validationHelpers";
 import Input from "../components/Input";
-import spanishWords from "an-array-of-spanish-words";
+import words from "an-array-of-spanish-words";
 
 function Form() {
   const [formData, setFormData] = useState({
     name: "",
     age: "",
     salary: "",
-    domain: "",
+    email2: "",
     email: "",
     password: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [showErrors, setShowErrors] = useState(false);
-
 
   //efecto que hace que la alerta se mantenga por 5 segundos
   useEffect(() => {
@@ -30,6 +33,40 @@ function Form() {
     }
   }, [errors]);
 
+  const validatePassword = (password) => {
+    const passwordValidationRules = [
+      {
+        test: (value) => /[a-z]/.test(value),
+        message: "Al menos una letra minúscula",
+      },
+      {
+        test: (value) => /[A-Z]/.test(value),
+        message: "Al menos una letra mayúscula",
+      },
+      { test: (value) => /[0-9]/.test(value), message: "Al menos un número" },
+      {
+        test: (value) => /[^a-zA-Z0-9]/.test(value),
+        message: "Al menos un símbolo especial",
+      },
+      { test: (value) => value.length >= 10, message: "Mínimo 10 caracteres" },
+    ];
+
+    let passwordErrors = passwordValidationRules
+      .filter((rule) => !rule.test(password))
+      .map((rule) => rule.message);
+
+    if (containsSequentialNumbers(password)) {
+      passwordErrors.push("No números consecutivos");
+    }
+
+    if (containsCommonSpanishWord(password, words)) {
+      passwordErrors.push(
+        "La contraseña no debe contener palabras comunes en español"
+      );
+    }
+
+    return passwordErrors;
+  };
 
   const validateForm = () => {
     let tempErrors = {};
@@ -75,39 +112,19 @@ function Form() {
     }
 
     // Validación para el correo electrónico 2
-    if (!formData.domain) {
-      tempErrors.domain = "El correo electrónico es obligatorio";
+    if (!formData.email2) {
+      tempErrors.email2 = "El correo electrónico es obligatorio";
     } else if (
-      !/^[a-zA-Z0-9._%+-]+@utdelacosta\.edu\.mx$/.test(formData.domain)
+      !/^[a-zA-Z0-9._%+-]+@utdelacosta\.edu\.mx$/.test(formData.email2)
     ) {
-      tempErrors.domain = "Correo electrónico no válido";
+      tempErrors.email2 = "Correo electrónico no válido";
     }
 
     // Validación para la contraseña
     if (!formData.password) {
       tempErrors.password = "La contraseña es obligatoria";
     } else {
-      const passwordRules = [
-        { regex: /[a-z]/, message: "Al menos una letra minúscula" },
-        { regex: /[A-Z]/, message: "Al menos una letra mayúscula" },
-        { regex: /[0-9]/, message: "Al menos un número" },
-        { regex: /[^a-zA-Z0-9]/, message: "Al menos un símbolo especial" },
-        {
-          regex:
-            /(?!.*(012|123|234|345|456|567|678|789|890|098|987|876|765|654|543|432|321|210)).*/,
-          message: "No números consecutivos",
-        },
-        {
-          regex: /(?!.*(00|11|22|33|44|55|66|77|88|99)).*/,
-          message: "No números iguales juntos",
-        },
-        { regex: /.{10,}/, message: "Mínimo 10 caracteres" },
-      ];
-
-      //se itera sobre los errores acumulados en " rule " y los errores encontrados se acumulan en el objeto tempErrors
-      let passwordErrors = passwordRules
-        .filter((rule) => !rule.regex.test(formData.password))
-        .map((rule) => rule.message);
+      const passwordErrors = validatePassword(formData.password);
       if (passwordErrors.length > 0) {
         tempErrors.password =
           "La contraseña no cumple con: " + passwordErrors.join(", ");
@@ -133,30 +150,18 @@ function Form() {
     }
   };
 
-  const renderErrorMessages = () => {
-    return Object.keys(errors).map((key) => {
-      if (errors[key]) {
-        return (
-          <li className="text-white text-xs" key={key}>
-            {errors[key]}
-          </li>
-        );
-      }
-      return null;
-    });
-  };
-
   return (
     <div className="container my-auto mx-auto p-4">
       <div>
         <form
           onSubmit={handleSubmit}
-          className="bg-white container p-10 shadow-md rounded border-4"
+          className="bg-white container p-10 shadow-md rounded border-4 dark:bg-gray-800 dark:border"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:grid-cols-1 lg:grid-cols-3 mb-5">
             <Input
               name="name"
               type="text"
+              placeholder="John Doe"
               label="Nombre"
               value={formData.name}
               onChange={handleChange}
@@ -166,6 +171,7 @@ function Form() {
             <Input
               name="age"
               type="text"
+              placeholder="Edad"
               label="Edad"
               value={formData.age}
               onChange={handleChange}
@@ -175,6 +181,7 @@ function Form() {
             <Input
               name="salary"
               type="text"
+              placeholder="3000.23"
               label="Sueldo"
               value={formData.salary}
               onChange={handleChange}
@@ -182,26 +189,31 @@ function Form() {
               isSubmitted={isSubmitted}
             />
             <Input
-              name="domain"
-              type="text"
-              label="Dominio"
-              value={formData.domain}
-              onChange={handleChange}
-              error={errors.domain}
-              isSubmitted={isSubmitted}
-            />
-            <Input
               name="email"
               type="email"
+              placeholder="example@gmail|hotmail|outlook|live|yahoo.com"
               label="Correo electrónico"
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
               isSubmitted={isSubmitted}
             />
+
+            <Input
+              name="email2"
+              type="text"
+              placeholder="example@utdelacosta.edu.mx"
+              label="Correo 2"
+              value={formData.email2}
+              onChange={handleChange}
+              error={errors.email2}
+              isSubmitted={isSubmitted}
+            />
+
             <Input
               name="password"
               type="password"
+              placeholder="Example!03"
               label="Ingresa contraseña"
               value={formData.password}
               onChange={handleChange}
@@ -217,14 +229,18 @@ function Form() {
             Guardar datos
           </button>
         </form>
-        {showErrors && Object.keys(errors).length > 0 ? (
+        {showErrors && Object.keys(errors).length > 0 && (
           <div className="mt-10 p-10 bg-red-400 border-red-700 border-2 rounded-md">
             <h3 className="text-white mb-2 font-bold">Lista de errores</h3>
             <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-              {renderErrorMessages()}
+              {Object.entries(errors).map(([key, error]) => (
+                <li key={key} className="text-white text-xs">
+                  {error}
+                </li>
+              ))}
             </ul>
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );
